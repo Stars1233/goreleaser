@@ -122,7 +122,7 @@ func setupGitignore(path string, lines []string) (bool, error) {
 	ignored, _ := os.ReadFile(path)
 	content := strings.ReplaceAll(string(ignored), "\r\n", "\n")
 	ignoredLines := map[string]bool{}
-	for _, line := range strings.Split(content, "\n") {
+	for line := range strings.SplitSeq(content, "\n") {
 		ignoredLines[line] = true
 	}
 

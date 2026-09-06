@@ -293,12 +293,12 @@ func TestGiteaGetExistingReleaseByTag(t *testing.T) {
 	listed := false
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
-		switch {
-		case r.URL.Path == "/api/v1/version":
+		switch r.URL.Path {
+		case "/api/v1/version":
 			fmt.Fprint(w, `{"version":"1.22.0"}`)
-		case r.URL.Path == "/api/v1/repos/owner/repo/releases/tags/v1.0.0":
+		case "/api/v1/repos/owner/repo/releases/tags/v1.0.0":
 			fmt.Fprint(w, `{"id":123,"tag_name":"v1.0.0"}`)
-		case r.URL.Path == "/api/v1/repos/owner/repo/releases":
+		case "/api/v1/repos/owner/repo/releases":
 			listed = true
 			http.Error(w, "unexpected release list", http.StatusInternalServerError)
 		default:
@@ -920,10 +920,10 @@ func TestGiteaChangelogRequestUsesReleaseContext(t *testing.T) {
 	releaseResponse := make(chan struct{})
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
-		switch {
-		case r.URL.Path == "/api/v1/version":
+		switch r.URL.Path {
+		case "/api/v1/version":
 			fmt.Fprint(w, `{"version":"1.22.0"}`)
-		case r.URL.Path == "/api/v1/repos/someone/something/compare/v1.0.0...v1.1.0":
+		case "/api/v1/repos/someone/something/compare/v1.0.0...v1.1.0":
 			select {
 			case entered <- struct{}{}:
 			default:
